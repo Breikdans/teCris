@@ -4,13 +4,13 @@
 using namespace std;
 
 const STR_Color IO::colores[MAX_COLORES - 1] =	{	
-												{ 0x00, 0x00, 0xFF },	// AZUL
-												{ 0x00, 0x00, 0x80 },	// CIAN
-												{ 0xFF, 0x00, 0x00 },	// ROJO
-												{ 0x00, 0xFF, 0x00 },	// VERDE
-												{ 0x80, 0x30, 0x30 },	// NARANJA
-												{ 0x00, 0xFF, 0xFF },	// AMARILLO
-												{ 0xFF, 0x00, 0xFF },	// MORADO
+												{ 0x02, 0x4A, 0xD4 },	// AZUL
+												{ 0x00, 0xB2, 0x8E },	// CIAN
+												{ 0xF5, 0x06, 0x09 },	// ROJO
+												{ 0x41, 0xB6, 0x0B },	// VERDE
+												{ 0xF7, 0x98, 0x00 },	// NARANJA
+												{ 0xD3, 0xBA, 0x06 },	// AMARILLO
+												{ 0xE0, 0x00, 0xD7 },	// MORADO
 												{ 0x55, 0x55, 0x55 },	// PIVOTE
 												{ 0x00, 0x00, 0x00 },	// NEGRO
 												{ 0xFF, 0xFF, 0xFF },	// BLANCO
@@ -19,7 +19,7 @@ const STR_Color IO::colores[MAX_COLORES - 1] =	{
 IO::IO()
 {
 	//Inicializamos SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
 		cerr << "No se ha podido inicializar SDL!! SDL_Error: " << SDL_GetError() << endl;
 		exit(-1);

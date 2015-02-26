@@ -24,6 +24,7 @@ private:
 	IO *mIO;
 	Piezas *mPiezas;
 
+	int mGameSpeed;
 	void DrawBoard();
 	void DrawPiece(int , int , int , int );
 

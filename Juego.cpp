@@ -8,6 +8,8 @@ Juego::Juego()
 	mIO			= new IO();
 	mTablero	= new Tablero();
 	mPiezas		= new Piezas();
+
+	mGameSpeed = 500;
 }
 
 void Juego::Init()
@@ -101,6 +103,7 @@ void Juego::Input(void)
 {
 	// Para tratamiento de eventos
 	SDL_Event mEvent;
+	Uint8 ui_tecla = 0;
 
 	// procesamos los eventos
 	while (SDL_PollEvent(&mEvent))
@@ -132,7 +135,7 @@ void Juego::Input(void)
 			mPosY++;
 	}
 
-	if (mIO->Key(SDL_SCANCODE_SPACE))
+	if (mIO->Key(SDL_SCANCODE_SPACE) || mIO->Key(SDL_SCANCODE_UP))
 	{
 		if (mTablero->MovimientoPosible(mPosX, mPosY, mPieza, (mRotacion + 1) % ROTACIONES))
 			mRotacion = (mRotacion + 1) % ROTACIONES;
@@ -141,23 +144,38 @@ void Juego::Input(void)
 	if (mIO->Key(SDL_SCANCODE_ESCAPE))
 		setRunning(false);
 
-//	SDL_Delay(40);
+	SDL_Delay(50);
 }
 
 // Actualiza la posicion de las fichas del juego
 void Juego::Update()
 {
-	if (mTablero->MovimientoPosible(mPosX, mPosY + 1, mPieza, mRotacion))
-		mPosY++;
-	else
-	{
-		mTablero->GuardaPieza(mPosX, mPosY, mPieza, mRotacion);
-		mPuntos += mTablero->CompruebaFilaCompleta() * 1000;
+	static Uint32 ui_TimeIni = SDL_GetTicks();
+	Uint32 ui_TimeNow = SDL_GetTicks();
 
-		if (mTablero->GameOver())
-			setRunning(false);
+	int iPuntos = 0;
+
+	if ((ui_TimeNow - ui_TimeIni) > mGameSpeed)
+	{
+		if (mTablero->MovimientoPosible(mPosX, mPosY + 1, mPieza, mRotacion))
+			mPosY++;
 		else
-			NewPiece();
+		{
+			mTablero->GuardaPieza(mPosX, mPosY, mPieza, mRotacion);
+			if ((iPuntos = mTablero->CompruebaFilaCompleta()) > 0)
+			{
+				mPuntos += iPuntos;
+				if ( (mGameSpeed >= 200) && (mPuntos % 5 == 0) )
+					mGameSpeed -= 100;
+			}
+
+			if (mTablero->GameOver())
+				setRunning(false);
+			else
+				NewPiece();
+		}
+
+		ui_TimeIni = SDL_GetTicks();
 	}
 }
 
